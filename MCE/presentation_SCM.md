@@ -1,5 +1,5 @@
 ---
-marp: false
+marp: true
 theme: default
 paginate: true
 style: |
@@ -15,13 +15,23 @@ style: |
 
 <!-- _class: lead -->
 
-# The Stratified Configuration Model (SCM)
+# A new model for generating stratified networks.
 
 Leandro Chaves Rêgo, Carlos Miguel Moreira Gonçalves, Pablo Fierens 
 
 ![width:300](./img/ufc-logo-universidade-14.png)
 ![width:300](./img/itba_logo-2000x664.png)
 ![width:500](./img/complenet.jpeg)
+
+---
+
+# Summary
+
+1.  **Motivation:** Limitations of current network models (e.g., CM) in capturing node attributes and clustering.
+2.  **Proposal:** The Stratified Configuration Model (SCM) – extension of CM incorporating categories (strata).
+3.  **Methodology:** SCM algorithm, including stratification and adjustable clustering mechanism (parameter *p*).
+4.  **Evaluation:** Application and analysis of SCM on two distinct datasets (POLYMOD and Political Blogs).
+5.  **Results:** Comparison of SCM with CM in terms of network structure, inter-category connections, clustering, and other topological metrics.
 
 ---
 
@@ -152,7 +162,7 @@ Based on empirical data:
 
 5.  **Connect Stubs (Stratified CM):**
     *   Take the next node $\nu$.
-    *   For each target category $a$ in any order where $\nu$ still needs connections ($\kappa_{\nu,a} > 0$):
+    *   For each target category $a$ in a predefined order where $\nu$ still needs connections ($\kappa_{\nu,a} > 0$):
         *   Randomly pick an available node $\mu$ from category $a$.
         *   **Constraint Check:** $\mu$ must also need a connection to $\nu$'s category ($\kappa_{\mu,f_\nu} > 0$) and not be already connected to $\nu$.
         *   If a valid $\mu$ is found: Connect $\nu$---$\mu$, decrement $\kappa_{\nu,a}$ and $\kappa_{\mu,f_\nu}$.
@@ -164,8 +174,8 @@ Based on empirical data:
 
 6.  **Enhance Clustering (Manzo & Rijt):**
     *   *After* processing node $\nu$'s direct connections (Step 5):
-    *   Consider pairs of $\nu$'s newly connected neighbors.
-    *   Connect each pair with probability $p$. (Increases triangles) and decrement $\kappa_{\nu,a}$ and $\kappa_{\mu,f_\nu}$
+    *   Consider pairs of $\nu_1$ and $\nu_2$ neighbors of $\nu$.
+    *   Connect each pair with probability $p$. (Increases triangles) and decrement $\kappa_{\nu_1,f_{\nu_2}}$ and $\kappa_{\nu_2,f_{\nu_1}}$
 
 7.  **Repeat:** Perform Steps 5 & 6 for all nodes in the sorted list.
 
@@ -241,8 +251,8 @@ Based on empirical data:
 
 ![bg right width:640](./img/result_matrix_out_POLYMOD.webp)
 
-*   **Observation:** SCM yields a closer approximation to empirical inter-category connection frequencies compared to the standard CM.
-*   Exception noted for interactions involving the first (youngest) age category.
+- SCM (p = 0.0) yields a closer approximation to empirical inter-category connection frequencies compared to the standard CM.
+-   Exception noted for interactions involving the first (youngest) age category.
 
 ---
 
